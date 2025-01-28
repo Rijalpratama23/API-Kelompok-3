@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  user_id  Int       @id @default(autoincrement())
+  username String    @unique
+  password String
+  role     String    // "admin" atau "petugas"
+  Transaksi Transaksi[] // Relasi ke Transaksi
+}
+
+model Member {
+  member_id Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  phone     String
+  address   String
+  Transaksi Transaksi[] // Relasi ke Transaksi
+}
+
+model Buku {
+  buku_id       Int       @id @default(autoincrement())
+  title         String
+  author        String
+  publisher     String
+  year_published Int
+  stock         Int
+  isbn          String
+  Transaksi     Transaksi[] // Relasi ke Transaksi
+}
+
+model Transaksi {
+  transaksi_id Int      @id @default(autoincrement())
+  borrow_date  DateTime
+  return_date  DateTime?
+  status       String   // "Dipinjam" atau "Dikembalikan"
+  
+  member_id Int
+  buku_id   Int
+  user_id   Int
+
+  Member Member @relation(fields: [member_id], references: [member_id])
+  Buku   Buku   @relation(fields: [buku_id], references: [buku_id])
+  User   User   @relation(fields: [user_id], references: [user_id])
+}
