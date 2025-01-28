@@ -44,7 +44,7 @@ model Buku {
 model Transaksi {
   transaksi_id Int      @id @default(autoincrement())
   borrow_date  DateTime
-  return_date  DateTime?
+  return_date  DateTime? 
   status       String   // "Dipinjam" atau "Dikembalikan"
   
   member_id Int
